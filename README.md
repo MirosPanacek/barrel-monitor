@@ -6,6 +6,10 @@ API Documentation:: [link](https://to-barrel-monitor.azurewebsites.net/swagger/i
   *or alternatively*
 - docker
 - docker compose
+## Install ##
+```  
+npm install
+```
 
 ## Run: ##
 ```bash
