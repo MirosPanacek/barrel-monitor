@@ -21,7 +21,7 @@ test.beforeAll(async () => {
 
 /**
  * Test Case: TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id}
- * ID: TC006
+ * ID: TC007
  * Title: Validate Successful Deletion of Barrel via DELETE /barrels/{id}
  * Preconditions:
  *   - A barrel with the specified ID exists
@@ -49,7 +49,7 @@ test('TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id}', as
 
 /**
  * Test Case: TC008 Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id}
- * ID: TC007
+ * ID: TC008
  * Title: Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id}
  * Preconditions:
  *   - API endpoint /barrels/ is available

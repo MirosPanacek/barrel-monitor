@@ -1,7 +1,7 @@
 /**Return existing valid barrel id */
 export const getFirstBarrelId = async () => {
     const barrels = await fetchBarrels();
-    if (barrels) {
+    if (barrels && barrels.length > 0) {
         console.log("getFirstBarrelId: " + barrels[0].id);
         return barrels[0].id;
     }

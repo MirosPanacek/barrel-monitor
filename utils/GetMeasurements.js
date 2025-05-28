@@ -1,7 +1,7 @@
 /**Return existing valid barrel id */
 export const getFirstMeasurementId = async () => {
     const measurements = await fetchMeasurement();
-    if (measurements) {
+    if (measurements && measurements.length > 0) {
         console.log("getFirstMeasurementlId: " + measurements[0].id);
         return measurements[0].id;
     }

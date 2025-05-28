@@ -47,7 +47,7 @@ test(`TC004 Validate Successful Retrieval of Array of Barrels via GET /barrels `
 * Preconditions:
 *  - API endpoint /barrels/ is available
 * Test Data:
-*   from TC004 
+*   from api 
 * Steps:
  *  - Send GET request to /barrels/{id}
  *  - Parse response JSON
