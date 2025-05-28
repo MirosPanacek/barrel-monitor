@@ -5,12 +5,18 @@ import { measurements } from '../../testingData/MeasurementsPost';
 //IDs of newly created barrels (for cleanup)
 let barrelslId = [];
 let existingMeasurementId;
+let skipTests = false;
 
 // Get an existing Measurement ID from API before tests
-/*test.beforeAll(async () => {
-    existingMeasurementId = await measurementWithSameId();
+test.beforeAll(async () => {
+    try {
+        existingMeasurementId = await measurementWithSameId();
+    } catch (error) {
+        console.error("POST /measurements no data for tests TC011");
+        skipTests = true;
+    }
 });
-*/
+
 // Remove all created Measurements after tests
 test.afterAll(async () => {
     for (const id of barrelslId) {
@@ -85,7 +91,7 @@ for (const measurement of measurements) { // data driven test
         const response = await request.post('measurements/', { data: measurement.payload });
         const json = await response.json();
         console.log(json);
-        if(json.id) {
+        if (json.id) {
             barrelslId.push(json.id);
         }
         expect.soft(response.status()).toBe(400);
@@ -111,6 +117,7 @@ for (const measurement of measurements) { // data driven test
  *   - No duplicate measurement is created
  */
 test(`TC011 Validate Conflict on Creating Measurement with Existing ID via POST /measurements`, async ({ request }) => {
+    test.skip(skipTests, "No Measurements on api");
     console.log(`Running test with measurement id: ${sameId.payload.id}`);
     const response = await request.post('measurements/', { data: sameId.payload });
     const headers = response.headers();

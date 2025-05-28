@@ -39,6 +39,286 @@ If the command `npx playwright show-report` opens an empty browser window, check
 - TC014 Validate Error for Malformed Measurements id GET /measurements/{id} - TODO data driven
 
 ---
+## 🧪 Test cases ##
+
+<details>
+  <summary>Test Case: TC001 - Create Barrel via POST /barrels</summary>
+
+```
+ * Test Case: TC001 - Create Barrel via POST /barrels
+ * ID: TC001
+ * Title: Verify successful barrel creation with valid data POST /barrels
+ * Preconditions:
+ *  - API endpoint /barrels/ is available
+ * Test Data:
+ * ../../testingData/barrelsPost.js
+ * Steps:
+ *  - Send POST request to /barrels/ with payload
+ *  - Parse response JSON
+ *  - Validate response against Barrel.json schema
+ *  - Check response status is 201
+ * Expected Result:
+ *  - Response status is 201
+ *  - Response body matches Barrel.json schema
+ *  - Response JSON values matches request values  
+```
+</details>
+
+<details>
+  <summary>Test Case: TC002 - Verify error handeling  POST /barrels</summary>
+
+```  
+ *Test Case: TC002 - Verify error handeling  POST /barrels  
+ * ID: TC002  
+ * Title: Verify error handeling with invalid data POST /barrels  
+ * Preconditions:  
+ *  - API endpoint /barrels/ is available  
+ * Test Data:  
+ * ../../testingData/InvalidBarrelsPost.js  
+ * Steps:  
+ *  - Send POST request to /barrels/ with payload
+ *  - Check response status is 400
+ * Expected Result:
+ *  - Response status is 400
+```
+</details> 
+<details> 
+<summary>Test Case: TC003 - ID conflict  POST /barrels</summary>  
+
+``` 
+ * Test Case: TC003 - ID conflict  POST /barrels
+ * ID: TC003
+ * Title: Verify error handeling when ID alredy exist POST /barrels
+ * Preconditions:
+ *  - API endpoint /barrels/ is available
+ * Test Data:
+ * '../../testingData/BarrelsSameIdPost.js
+ * Steps:
+ *  - Send POST request to /barrels/ with payload
+ *  - Check response status is 409
+ * Expected Result:
+ *  - Response status is 409  
+```
+</details>  
+
+<details> 
+<summary>Test Case: TC004 Validate Successful Retrieval of Array of Barrels via GET /barrels </summary>  
+
+``` 
+ * Test Case: TC004 Validate Successful Retrieval of Array of Barrels via GET /barrels 
+ * ID: TC004
+ * Title:  Validate Successful Retrieval of Array of Barrels via GET /barrels 
+ * Preconditions:
+ *  - API endpoint /barrels/ is available
+ * Steps:
+ *  - Send GET request to /barrels/ 
+ *  - Parse response JSON
+ *  - Validate response against BarrelsArray.schema.json schema
+ *  - Check response status is 200
+ * Expected Result:
+ *  - Response status is 200
+ *  - Response body matches BarrelsArray.schema.json schema
+```
+</details>  
+<details> 
+<summary>Test Case: TC005 Validate Successful Retrieval of Barrel via GET /barrels/{id}</summary>  
+
+``` 
+ * Test Case: TC005 Validate Successful Retrieval of Barrel via GET /barrels/{id}
+ * ID: TC005
+ * Title: Validate Successful Retrieval of Barrel via GET /barrels/{id}
+ * Preconditions:
+ *  - API endpoint /barrels/ is available
+ * Test Data:
+ *   from api 
+ * Steps:
+ *  - Send GET request to /barrels/{id}
+ *  - Parse response JSON
+ *  - Validate response against Barrel.schema.json schema
+ *  - Check response status is 200
+ * Expected Result:
+ *  - Response status is 200
+ *  - Response body matches BarrelsArray.schema.json schema
+```
+</details>  
+<details>
+<summary>Test Case:  TC006 Validate Error for Malformed Barrel id GET /barrels/{id}</summary>  
+
+``` 
+ * Test Case: TC006 Validate Error for Malformed Barrel id GET /barrels/{id}
+ * ID: TC006
+ * Title: Validate Error for Malformed Barrel id GET /barrels/{id}
+ * Preconditions:
+ *  - API endpoint /barrels/ is available
+ * Test Data:
+ *    72193603-1a49-41e9-af88 
+ *    TODO possible data driven
+ * Steps:
+ *  - Send GET request to /barrels/{id}
+ *  - Check response status is 400
+ * Expected Result:
+ *  - Response status is 400
+```
+</details>
+<details>  
+<summary>Test Case: TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id}</summary>  
+
+``` 
+ *Test Case: TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id}
+ * ID: TC007
+ * Title: Validate Successful Deletion of Barrel via DELETE /barrels/{id}
+ * Preconditions:
+ *   - A barrel with the specified ID exists
+ *   - API endpoint /barrels/ is available
+ * Test Data:
+ *   - Existing barrel ID from previous test or setup
+ * Steps:
+ *   - Send DELETE request to /barrels/{id}
+ *   - Verify response status is 204 (No Content)
+ *   - Optionally, send GET request to /barrels/{id} to confirm deletion
+ *   - Verify GET response status is 404 (Not Found)
+ * Expected Result:
+ *   - DELETE response status is 204
+ *   - Subsequent GET response status is 404, confirming barrel was deleted
+```
+</details>  
+<details>
+<summary>Test Case: TC009 Validate Successful Creation of Measurement via POST /measurements</summary>  
+
+``` 
+ * Test Case: TC009 Validate Successful Creation of Measurement via POST /measurements
+ * ID: TC009
+ * Title: Validate Successful Creation of Measurement via POST /measurements
+ * Preconditions:
+ *   - API endpoint /measurements is available
+ *   - Required fields and valid value formats are known
+ * Test Data:
+ *   - Valid measurement payload: ../../testingData/MeasurementsPost.js
+ * Steps:
+ *   - Send POST request to /measurements with valid JSON payload
+ *   - Parse response JSON
+ *   - Validate response against Measurement.schema.json schema
+ *   - Verify response status is 201 (Created)
+ * Expected Result:
+ *   - Response status is 201
+ *   - Response body contains created measurement with correct data
+ *   - Measurement is stored and retrievable via GET /measurements/{id}
+```
+</details>  
+<details>
+<summary>Test Case: TC010 Validate Failure Scenarios When Creating Measurement via POST /measurements</summary>  
+
+``` 
+ * Test Case: TC010 Validate Failure Scenarios When Creating Measurement via POST /measurements
+ * ID: TC010
+ * Title: Validate Failure Scenarios When Creating Measurement via POST /measurements
+ * Preconditions:
+ *   - API endpoint /measurements is available
+ * Test Data:
+ *   - Invalid measurement payloads:
+ *     1. Missing required fields (e.g., no "id")
+ *     2. Fields with invalid types (e.g., "dirtLevel": "hot")
+ *     3. Fields with special characters (e.g., "barrelId": "@#!")
+ *     4. Values out of acceptable range (e.g., "weight": -1)
+ *     5. Null or empty strings in required fields
+ *     payload: ../../testingData/InvalidMeasurementsPost.js
+ * Steps:
+ *   - For each invalid payload:
+ *     - Send POST request to /measurements
+ *     - Parse the response JSON
+ *     - Validate error message and status code
+ *     - Ensure no measurement is created
+ * Expected Result:
+ *   - Response status is 400 (Bad Request) or appropriate error code
+ *   - Response contains validation error message(s)
+ *   - No new measurement is persisted
+```
+</details>  
+<details>
+<summary>Test Case: TC011 Validate Conflict on Creating Measurement with Existing ID via POST /measurements</summary>  
+
+``` 
+ * Test Case: TC011 Validate Conflict on Creating Measurement with Existing ID via POST /measurements
+ * ID: TC011
+ * Title: Validate Conflict on Creating Measurement with Existing ID via POST /measurements
+ * Preconditions:
+ *   - API endpoint /measurements is available
+ *   - A measurement with the same ID already exists
+ * Test Data:
+ *   - Valid measurement payload with duplicate ID
+ * Steps:
+ *   - Send POST request to /measurements with a payload using an existing measurement ID
+ *   - Parse the response
+ *   - Validate status code and error message
+ * Expected Result:
+ *   - Response status is 409 (Conflict)
+ *   - Response body contains an appropriate error message (e.g., "Measurement ID already exists")
+ *   - No duplicate measurement is created
+```
+</details>  
+<details>
+<summary>Test Case: TC012 Validate Successful Retrieval of Array of Measurements via GET /measurements /measurements</summary>  
+
+``` 
+ * Test Case: TC012 Validate Successful Retrieval of Array of Measurements via GET /measurements 
+ * ID: TC012
+ * Title:  Validate Successful Retrieval of Array of Measurements via GET /measurements 
+ * Preconditions:
+ *  - API endpoint /barrels/ is available
+ * Steps:
+ *  - Send GET request to /measurements
+ *  - Parse response JSON
+ *  - Validate response against MeasurementsArray.schema.json schema
+ *  - Check response status is 200
+ * Expected Result:
+ *  - Response status is 200
+ *  - Response body matches MeasurementsArray.schema.json schema
+```
+</details> 
+<details> 
+<summary>Test Case: TC013 Validate Successful Retrieval of Measurements via GET /measurements/{id}</summary>  
+
+``` 
+ * Test Case: TC013 Validate Successful Retrieval of Measurements via GET /measurements/{id}
+ * ID: TC013
+ * Title: Validate Successful Retrieval of Measurement via GET /measurements/{id}
+ * Preconditions:
+ *  - API endpoint /measurements/ is available
+ * Test Data:
+ *   from api
+ * Steps:
+ *  - Send GET request to /measurements/{id}
+ *  - Parse response JSON
+ *  - Validate response against Measurement.schema.json schema
+ *  - Check response status is 200
+ * Expected Result:
+ *  - Response status is 200
+ *  - Response body matches Measurement.schema.json schema
+```
+</details>  
+<details> 
+<summary>Test Case: TC014 Validate Error for Malformed Measurements id GET /measurements/{id}</summary>  
+
+``` 
+ * Test Case: TC014 Validate Error for Malformed Measurements id GET /measurements/{id}
+ * ID: TC014
+ * Title: Validate Error for Malformed Measurements id GET /measurements/{id}
+ * Preconditions:
+ *  - API endpoint /measurements is available
+ * Test Data:
+ *    data from api
+ *    example: 72193603-1a49-41e9-af88 
+ *    TODO possible data driven
+ * Steps:
+ *  - Send GET request to /measurements/{id}
+ *  - Check response status is 400
+ * Expected Result:
+ *  - Response status is 400
+```
+</details>  
+
+---
+# BUG REPORT #
 ## ID001 ##
 ### POST /barrels ###
  **Severity:** Moderate
