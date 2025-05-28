@@ -257,7 +257,7 @@ If the command `npx playwright show-report` opens an empty browser window, check
 ```
 </details>  
 <details>
-<summary>Test Case: TC012 Validate Successful Retrieval of Array of Measurements via GET /measurements /measurements</summary>  
+<summary>Test Case: TC012 Validate Successful Retrieval of Array of Measurements via GET /measurements</summary>  
 
 ``` 
  * Test Case: TC012 Validate Successful Retrieval of Array of Measurements via GET /measurements 
