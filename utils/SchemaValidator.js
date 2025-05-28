@@ -12,7 +12,14 @@ const __dirname = path.dirname(__filename);
 export class SchemaValidator {
   static ajv = addFormats(new Ajv({ allErrors: true }));
 
-  static validateSchema(data, schemaFile) {
+  static validateSchema(data, schemaFile, referencedSchemas = []) {
+    //add references
+    for (const refFile of referencedSchemas) {
+    const refPath = path.resolve(__dirname, '../schemas', refFile);
+    const refSchema = JSON.parse(fs.readFileSync(refPath, 'utf-8'));
+    this.ajv.addSchema(refSchema);
+  }
+    //read main schema
     const schemaPath = path.resolve(__dirname, '../schemas', schemaFile);
     const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
     const validate = this.ajv.compile(schema);

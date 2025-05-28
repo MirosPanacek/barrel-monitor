@@ -9,6 +9,7 @@ import { barrelWithSameId } from '../../testingData/BarrelsSameIdPost'
 // It is for clean-up */
 let barrelslId = [];
 let sameId;
+//get existing id barrel from api
 test.beforeAll(async () => {
     sameId = await barrelWithSameId();
 });
@@ -47,7 +48,7 @@ for (const barrel of barrels) {//data driven test
         await expect.soft(json.qr).toContain(barrel.payload.qr);
         await expect.soft(json.rfid).toContain(barrel.payload.rfid);
         await expect.soft(json.nfc).toContain(barrel.payload.nfc);
-        SchemaValidator.validateSchema(json, 'Barrel.json');
+        SchemaValidator.validateSchema(json, 'Barrel.schema.json');
         expect(response.status()).toBe(201);//response satus code validation 
     });
 }
@@ -94,7 +95,7 @@ for (const barrel of invalidBarrels) {//data driven test
  *  - Response status is 409
  */
 test(`TC003 - ID conflict  POST /barrels : `, async ({ request }) => {
-    console.log(`Running test with ID: ${sameId.payload.id}`);
+    console.log(`Running test with barrel id: ${sameId.payload.id}`);
     const response = await request.post('barrels/', { data: sameId.payload });
     const headers = await response.headers();
     console.log(headers)
