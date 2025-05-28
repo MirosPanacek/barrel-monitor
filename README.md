@@ -1,9 +1,9 @@
 # Barrel-monitor 
-API documentation: [link](https://to-barrel-monitor.azurewebsites.net/swagger/index.html)  
+API Documentation:: [link](https://to-barrel-monitor.azurewebsites.net/swagger/index.html)  
 ## Requirements: ##
 - node.js v19.9.0
 - npm v9.6.3 \
-  *or*
+  *or alternatively*
 - docker
 - docker compose
 
@@ -11,7 +11,7 @@ API documentation: [link](https://to-barrel-monitor.azurewebsites.net/swagger/in
 ```bash
 npx playwright test --ui
 ```
-*OR*
+*or*
 ``` bash
 npx playwright test
 ```
@@ -20,19 +20,22 @@ npx playwright test
 ```bash
 docker compose up
 ```
-Test results is in: **./playwright-report/index.html**
-#### Run CI  in Github action ###
-The setting for github action is in /.github/workflows/main.yml  
-It's run if:
- - push on branches main
- - pull_request on branches main
- - at 12:00 UTC everyday
+Test results are located in: **./playwright-report/index.html**
+#### Run CI in GitHub Actions ###
+The configuration for GitHub Actions is located at:
+/.github/workflows/main.yml  
+It runs if:
+- There is a push on the main branch
+- There is a pull request targeting the main branch
+- Every day at 12:00 UTC
 
 ## Known Issue ##
-If the command `npx playwright show-report` opens an empty browser window, check whether the port used for the report is already occupied by another service.  
+- If the command `npx playwright show-report` opens an empty browser window, check whether the port used for the report is already in use by another service.  
+
+- Tests TC011 and TC013 are skipped because it is currently not possible to create the required data for them.  
 
 ## TODO ##
- 
+ The test clean-up logic needs improvement to handle scenarios where tests or the server terminate unexpectedly. To enable safe removal of test data on the next run, consider using a consistent prefix in data identifiers.
 
 ---
 ## 🧪 Test cases ##
@@ -335,40 +338,8 @@ If the command `npx playwright show-report` opens an empty browser window, check
 
 ---
 # BUG REPORT #
+
 ## ID001 ##
-### POST /barrels ###
- **Severity:** Moderate
-**Desctription:**
-If a user attempts to modify an existing record using the POST method and provides an barrel ID, the server returns a 500 Internal Server Error.
-The POST method should be used to create a new record without specifying an existing ID. If a client includes an existing barrel ID in a POST request, the server should respond with a 400 Bad Request or 409 Conflict, rather than a 500 Internal Server Error. Modifying existing records should be done using the PUT method.
-
-**Steps to reproduce:**
-```
-curl -X 'POST' \
-  'https://to-barrel-monitor.azurewebsites.net/barrels' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "id": "ff3a69a0-2ea7-4d6e-50dd-08dd4447ff51",
-  "qr": "124test",
-  "rfid": "458test",
-  "nfc": "test"
-}' -i
-```
-
-**Expected result:**
-Modifying existing records should be done using the PUT method. **OR** response HTTP code: 204 No Content
-**Actual result:**
-Response HTTP code: 500 Internal Server Error
-
-**Log:** 
-Response headers:
- content-length: 0 
- date: Tue,27 May 2025 10:43:25 GMT 
- server: Kestrel 
- 
----  
-## ID002 ##
 ### GET /barrels/{id} ###  
  **Severity:** Blocker
 **Description:**
@@ -393,7 +364,7 @@ Response headers:
  ```
 
 ---
-## ID003 ##
+## ID002 ##
 ### DELETE /barrels/{id}  ###
  **Severity:** Blocker
 **Description:**
@@ -418,7 +389,7 @@ Response headers:
  server: Kestrel  
 ```
  ---
- ## ID004 ##
+ ## ID003 ##
  ### POST /measurements ###
  **Severity:** Blocker
  **Description:**
@@ -467,17 +438,66 @@ Response headers
 ```
 
 ---
- ## ID005 ##
+ ## ID004 ##
  ### Documentation for POST /barrels ###
  **Severity:** none
  **Description:**
-There should by update api documentation for POST /barrels - http code from 200 to 201 and
-add documentation for http code 400 and 409 Conflict.
+The API documentation for POST /barrels should be updated:
+
+- Change the expected HTTP status code from 200 to 201
+
+- Add documentation for HTTP status codes 400 (Bad Request) and 409 (Conflict)
 
 ---
  ## ID006 ##
  ### Documentation for POST /measurements ###
  **Severity:** none
  **Description:**
-There should by update api documentation for POST /measurements - http code from 200 to 201 and
-add documentation for http code 400 and 409 Conflict.
+The API documentation for POST /measurements should be updated:
+
+- Change the expected HTTP status code from 200 to 201
+
+- Add documentation for HTTP status codes 400 (Bad Request) and 409 (Conflict)  
+
+--- 
+## ID005 ##
+ ### API Schema – String Field Constraints ###
+ **Severity:** medium  
+ **Description:**  
+The API schemas should be updated to include maximum length constraints for string fields.
+Not defining maximum string lengths can pose a potential security risk, such as buffer overflows or denial of service due to excessively large payloads.
+
+## ID006 ##
+ ### Conflict Handling Missing for Existing IDs in POST barrels/ ###
+ **Severity:** medium  
+ **Description:**  
+ When a client sends a POST request with a barrel ID that already exists, the server should respond with a 409 Conflict, indicating that the resource already exists.
+
+Currently, the API responds with a 500 Internal Server Error, which is misleading and incorrect.
+This behavior should be updated to follow standard REST conventions.
+
+**Steps to reproduce**  
+```
+curl -X 'POST' \
+  'https://to-barrel-monitor.azurewebsites.net/barrels' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": "54b32f14-a89e-46eb-50d6-08dd4447ff51",
+  "qr": "124test",
+  "rfid": "458test",
+  "nfc": "test"
+}' -i
+```  
+**Actual results:**
+Error 500
+**Expected result:**
+Error 409
+
+**Log:**  
+```  
+HTTP/1.1 500 Internal Server Error
+Content-Length: 0
+Date: Wed, 28 May 2025 19:54:02 GMT
+Server: Kestrel  
+```
