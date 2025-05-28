@@ -7,9 +7,10 @@ export const getFirstBarrelId = async () => {
     }
     throw "No results GET barrels/"
 };
+
 /**
  * Fetch barrels 
- * @returns  array of barrels
+ * @returns  array of barrels as JOSN
  */
 const fetchBarrels = async () => {
     console.log("URL:" + process.env.BASE_URL);
@@ -17,4 +18,14 @@ const fetchBarrels = async () => {
         method: 'GET',
     });
     return await response.json();
+}
+
+/**
+ * Verifies whether the barrelId exists in the system.
+ * @param {String barel id} barrelId 
+ * @returns true if barrel id is in system or false if not 
+ */
+export const barrelIdIsInArray = async (barrelId) => {
+    const barrels = await fetchBarrels();
+    return barrels.some( barrel => barrel.id === barrelId);
 }

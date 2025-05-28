@@ -26,11 +26,18 @@ The setting for github action is in /.github/workflows/main.yml
 It's run if:
  - push on branches main
  - pull_request on branches main
- - at 11:00 everyday
+ - at 12:00 UTC everyday
 
 ## Known Issue ##
 If the command `npx playwright show-report` opens an empty browser window, check whether the port used for the report is already occupied by another service.  
 
+## TODO ##
+- TC005 Validate Successful Retrieval of Barrel via GET /barrels/{id} - TODO data driven
+- TC001 Create Barrel via POST /barrels - TODO verify data in system 
+- TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id} -TODO data driven
+- TC008 Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id} -TODO data driven
+
+---
 ## ID001 ##
 ### POST /barrels ###
  **Severity:** Moderate
@@ -71,9 +78,9 @@ Response headers:
 If the user makes a request to the endpoint with a valid barrel UUID, the server returns a 500 error  
 
 **Steps to reproduce:**
- ````
+ ```
 curl -X 'GET'   'https://to-barrel-monitor.azurewebsites.net/barrels/95e50f55-6b64-4468-50fe-08dd4447ff51' -i
-`````
+```
 
 **Expected result:**
 Response HTTP code: 200 OK
@@ -140,7 +147,7 @@ Response HTTP code: 200 ok
 Response Http code: 400 Error: Bad Request
 
 **Log:**
-````
+```
 Response body
 Download
 {
@@ -160,7 +167,7 @@ Response headers
  date: Tue,27 May 2025 10:46:46 GMT 
  server: Kestrel 
  transfer-encoding: chunked
-````
+```
 
 ---
  ## ID005 ##
@@ -171,3 +178,9 @@ There should by update api documentation for POST /barrels - http code from 200 
 add documentation for http code 400 and 409 Conflict.
 
 ---
+ ## ID006 ##
+ ### Documentation for POST /measurements ###
+ **Severity:** none
+ **Description:**
+There should by update api documentation for POST /measurements - http code from 200 to 201 and
+add documentation for http code 400 and 409 Conflict.

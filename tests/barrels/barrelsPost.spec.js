@@ -50,6 +50,7 @@ for (const barrel of barrels) {//data driven test
         await expect.soft(json.nfc).toContain(barrel.payload.nfc);
         SchemaValidator.validateSchema(json, 'Barrel.schema.json');
         expect(response.status()).toBe(201);//response satus code validation 
+        // TODO verifi data from get if exist
     });
 }
 
