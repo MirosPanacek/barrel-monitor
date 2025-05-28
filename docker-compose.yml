@@ -1,5 +1,6 @@
 services:
   tests:
+    container_name: tests-barrel-monitor
     build: .
     volumes:
       - ./playwright-report:/app/playwright-report
