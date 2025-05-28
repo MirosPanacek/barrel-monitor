@@ -4,6 +4,7 @@ import { SchemaValidator } from '../../utils/SchemaValidator';
 import { removeBarrel } from '../../utils/RemoveBarrel';
 import { invalidBarrels } from '../../testingData/InvalidBarrelsPost';
 import { barrelWithSameId } from '../../testingData/BarrelsSameIdPost'
+import { getBarrel } from '../../utils/GetBarrelId';
 
 //**ID of new created barrels
 // It is for clean-up */
@@ -39,21 +40,31 @@ test.afterAll(async () => {
  *  - Response body matches Barrel.json schema
  *  - Response JSON values matches request values
  */
-for (const barrel of barrels) {//data driven test
-    test(`TC001 - Create Barrel via POST /barrels ${barrel.description}`, async ({ request }) => {
-        const response = await request.post('barrels/', { data: barrel.payload });
-        const json = await response.json();
-        console.log(json)
-        barrelslId.push(json.id);
-        expect.soft(json.qr).toContain(barrel.payload.qr);
-        expect.soft(json.rfid).toContain(barrel.payload.rfid);
-        expect.soft(json.nfc).toContain(barrel.payload.nfc);
-        expect.soft(response.status()).toBe(201);//response satus code validation
-        const validator = new SchemaValidator();
-        validator.validateSchema(json, 'Barrel.schema.json');
-        // TODO verifi data from get if exist
-    });
-}
+test.describe("TC001 - Create Barrel Tests", () => {
+    for (const barrel of barrels) {
+        test(`TC001 - Create Barrel via POST /barrels ${barrel.description}`, async ({ request }) => {
+            const response = await request.post('barrels/', { data: barrel.payload });
+            const json = await response.json();
+            console.log("Barel: " + json);
+            barrelslId.push(json.id);
+            //Verify payload
+            expect.soft(json.qr).toContain(barrel.payload.qr);
+            expect.soft(json.rfid).toContain(barrel.payload.rfid);
+            expect.soft(json.nfc).toContain(barrel.payload.nfc);
+            expect.soft(response.status()).toBe(201);//response satus code validation
+            const validator = new SchemaValidator();
+            validator.validateSchema(json, 'Barrel.schema.json');
+            //Verify data from api 
+            const barrelFromApi = await getBarrel(json.id);
+            expect(barrelFromApi).not.toBeNull;
+            console.log("Barerrel from api: " + barrelFromApi);
+            expect.soft(barrelFromApi.id).toContain(json.id);
+            expect.soft(barrelFromApi.qr).toContain(barrel.payload.qr);
+            expect.soft(barrelFromApi.rfid).toContain(barrel.payload.rfid);
+            expect.soft(barrelFromApi.nfc).toContain(barrel.payload.nfc);
+        });
+    }
+});
 
 
 /**
@@ -70,7 +81,7 @@ for (const barrel of barrels) {//data driven test
  * Expected Result:
  *  - Response status is 400
  */
-for (const barrel of invalidBarrels) {//data driven test
+invalidBarrels.forEach((barrel) => {//data driven test
     test(`TC002 - Verify error handeling  POST /barrels ${barrel.description}`, async ({ request }) => {
         const response = await request.post('barrels/', { data: barrel.payload });
         const json = await response.json();
@@ -80,7 +91,7 @@ for (const barrel of invalidBarrels) {//data driven test
         }
         expect(response.status()).toBe(400);//response satus code validationjson
     });
-}
+});
 
 /**
  * Test Case: TC003 - ID conflict  POST /barrels

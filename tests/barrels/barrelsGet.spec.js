@@ -1,20 +1,17 @@
 import { test, expect, request } from '@playwright/test';
 import { SchemaValidator } from '../../utils/SchemaValidator';
 import { getFirstBarrelId } from '../../utils/GetBarrelId';
+import { invalidId } from "../../testingData/InvalidIdGet";
 /**
  * This value is for TC005
  */
 let barel;
-/**
- * This value is for TC006
- */
-let malformedBarelId;
+
 /**
  * set barrels id for TC005 and TC006
  */
 test.beforeAll(async () => {
     barel = await getFirstBarrelId();
-    malformedBarelId = barel.substring(0, barel.length - 6);
 });
 
 /**
@@ -76,15 +73,18 @@ test(`TC005 Validate Successful Retrieval of Barrel via GET /barrels/{id}`, asyn
 *  - API endpoint /barrels/ is available
 * Test Data:
 *    72193603-1a49-41e9-af88 
-*    TODO possible data driven
 * Steps:
  *  - Send GET request to /barrels/{id}
  *  - Check response status is 400
  * Expected Result:
  *  - Response status is 400
 */
-test(`TC006 Validate Error for Malformed Barrel id GET /barrels/{id}`, async ({ request }) => {
-    console.log(`Running test with barrel id: ${malformedBarelId}`);
-    const response = await request.get(`barrels/${malformedBarelId}`);
-    expect(response.status()).toBe(400);//response satus code validation 
+test.describe("TC006 Validate Error for Malformed Barrel id", () => {
+    for (const invalidBarrel of invalidId) {
+        test(`TC006 Validate Error for Malformed Barrel id GET /barrels/${invalidBarrel.description}`, async ({ request }) => {
+            console.log(`Running test with barrel id: ${invalidBarrel.payload.id}`);
+            const response = await request.get(`barrels/${invalidBarrel.payload.id}`);
+            expect(response.status()).toBe(400);//response satus code validation 
+        });
+    }
 });

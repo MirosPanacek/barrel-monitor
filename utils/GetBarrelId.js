@@ -27,5 +27,21 @@ const fetchBarrels = async () => {
  */
 export const barrelIdIsInArray = async (barrelId) => {
     const barrels = await fetchBarrels();
-    return barrels.some( barrel => barrel.id === barrelId);
+    return barrels.some(barrel => barrel.id === barrelId);
+}
+
+/**
+ * Get barel from api
+ * @param {String barel id} barrelId 
+ * @returns barrel if not exist return null
+ */
+export const getBarrel = async (barrelId) => {
+    let barel = null;
+    const barrels = await fetchBarrels();
+    for (const barrel of barrels) {
+        if (barrel.id === barrelId) {
+            return barrel;
+        }
+    }
+    return barel;
 }

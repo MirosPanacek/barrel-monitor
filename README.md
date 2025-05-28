@@ -32,11 +32,7 @@ It's run if:
 If the command `npx playwright show-report` opens an empty browser window, check whether the port used for the report is already occupied by another service.  
 
 ## TODO ##
-- TC005 Validate Successful Retrieval of Barrel via GET /barrels/{id} - TODO data driven  
-- TC001 Create Barrel via POST /barrels - TODO verify data in system  
-- TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id} -TODO data driven 
-- TC008 Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id} -TODO data driven  
-- TC014 Validate Error for Malformed Measurements id GET /measurements/{id} - TODO data driven
+ 
 
 ---
 ## 🧪 Test cases ##
@@ -180,6 +176,26 @@ If the command `npx playwright show-report` opens an empty browser window, check
  * Expected Result:
  *   - DELETE response status is 204
  *   - Subsequent GET response status is 404, confirming barrel was deleted
+```
+</details>  
+<details>
+<summary>Test Case: TC008 Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id}</summary>  
+
+``` 
+ * Test Case: TC008 Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id}
+ * ID: TC008
+ * Title: Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id}
+ * Preconditions:
+ *   - API endpoint /barrels/ is available
+ * Test Data:
+ *   - Without paramet, Non-existent or malformed barrel ID, SQL injection
+ * Steps:
+ *   - Send DELETE request to /barrels/{incorrect_id}
+ *   - Verify response status is 404 (Not Found) or appropriate error code
+ *   - Validate error message in response body (if applicable)
+ * Expected Result:
+ *   - Response status is 404 or relevant error code
+ *   - Response body contains error message indicating barrel not found
 ```
 </details>  
 <details>

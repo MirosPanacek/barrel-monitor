@@ -1,23 +1,20 @@
 import { test, expect, request } from '@playwright/test';
 import { SchemaValidator } from '../../utils/SchemaValidator';
 import { getFirstMeasurementId } from '../../utils/GetMeasurements'
+import { invalidId } from "../../testingData/InvalidIdGet";
 
 let skipTests = false;
 /**
  * This value is for TC013
  */
 let measurementId;
-/**
- * This value is for TC014
- */
-let malformedMeasurementId;
+
 /**
  * set measurements id for TC013 and TC014
  */
 test.beforeAll(async () => {
     try {
         measurementId = await getFirstMeasurementId();
-        malformedMeasurementId = barel.substring(0, barel.length - 6);
     } catch (error) {
         console.error("GET /measurements no data for tests TC013 and TC014");
         skipTests = true;
@@ -83,18 +80,20 @@ test(`TC013 Validate Successful Retrieval of Measurements via GET /measurements/
 * Preconditions:
 *  - API endpoint /measurements is available
 * Test Data:
-*    data from api
 *    example: 72193603-1a49-41e9-af88 
-*    TODO possible data driven
 * Steps:
- *  - Send GET request to /measurements/{id}
- *  - Check response status is 400
- * Expected Result:
- *  - Response status is 400
+*  - Send GET request to /measurements/{id}
+*  - Check response status is 400
+* Expected Result:
+*  - Response status is 400
 */
-test(`TC014 Validate Error for Malformed Measurements id GET /measurements/{id}`, async ({ request }) => {
-    test.skip(skipTests, "No Measurements on api");
-    console.log(`Running test with measurement id: ${malformedMeasurementId}`);
-    const response = await request.get(`measurements/${malformedMeasurementId}`);
-    expect(response.status()).toBe(400);//response satus code validation 
+test.describe('TC014 Validate Error for Malformed Measurements ID Tests', () => {
+    for (const invalidMeasId of invalidId) {
+        test(`TC014 Validate Error for Malformed Measurements id GET /measurements/${invalidMeasId.description}`, async ({ request }) => {
+            test.skip(skipTests, "No Measurements on api");
+            console.log(`Running test with measurement id: ${invalidMeasId.payload.id}`);
+            const response = await request.get(`measurements/${invalidMeasId.payload.id}`);
+            expect(response.status()).toBe(400);//response satus code validation 
+        });
+    }
 });

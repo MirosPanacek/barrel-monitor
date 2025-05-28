@@ -5,9 +5,11 @@ import { createMeasurement } from '../../utils/CreateNewMeasurements';
 import { barrels } from '../../testingData/BarrelsPost';
 import { measurements } from '../../testingData/MeasurementsPost';
 import { measurementsIsInArray } from '../../utils/GetMeasurements'
+import { invalidBarrelsId } from "../../testingData/InvalidBarrelIdDelete";
 
 let barrel;
 let newMeasurements;
+let invalidB = invalidBarrelsId;
 /**
  * Create data for TC007.
  * Create barrel with measurements
@@ -54,7 +56,7 @@ test('TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id}', as
  * Preconditions:
  *   - API endpoint /barrels/ is available
  * Test Data:
- *   - Without paramet, Non-existent or malformed barrel ID
+ *   - Without paramet, Non-existent or malformed barrel ID, SQL injection
  * Steps:
  *   - Send DELETE request to /barrels/{incorrect_id}
  *   - Verify response status is 404 (Not Found) or appropriate error code
@@ -63,8 +65,11 @@ test('TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id}', as
  *   - Response status is 404 or relevant error code
  *   - Response body contains error message indicating barrel not found
  */
-//TODO data driven
-test('TC008 Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id}', async ({ request }) => {
-    const response = await request.delete(`barrels/985aa092-1c83-41ff-b1d4-14ee41aa3007`);
-    expect(response.status()).toBe(404);
+test.describe('TC008 Invalid Barrel ID Tests', () => {
+    for (const invalidBarrel of invalidBarrelsId) {
+        test(`TC008 Validate Deletion Attempt with ${invalidBarrel.description}`, async ({ request }) => {
+            const response = await request.delete(`barrels/${invalidBarrel.payload.id}`);
+            expect(response.status()).toBe(404);
+        });
+    }
 });
