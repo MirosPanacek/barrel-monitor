@@ -449,7 +449,7 @@ The API documentation for POST /barrels should be updated:
 - Add documentation for HTTP status codes 400 (Bad Request) and 409 (Conflict)
 
 ---
- ## ID006 ##
+ ## ID005 ##
  ### Documentation for POST /measurements ###
  **Severity:** none
  **Description:**
@@ -460,14 +460,14 @@ The API documentation for POST /measurements should be updated:
 - Add documentation for HTTP status codes 400 (Bad Request) and 409 (Conflict)  
 
 --- 
-## ID005 ##
+## ID006 ##
  ### API Schema – String Field Constraints ###
  **Severity:** medium  
  **Description:**  
 The API schemas should be updated to include maximum length constraints for string fields.
 Not defining maximum string lengths can pose a potential security risk, such as buffer overflows or denial of service due to excessively large payloads.
 
-## ID006 ##
+## ID007 ##
  ### Conflict Handling Missing for Existing IDs in POST barrels/ ###
  **Severity:** medium  
  **Description:**  
