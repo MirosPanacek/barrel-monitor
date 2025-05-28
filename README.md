@@ -350,9 +350,9 @@ If the user makes a request to the endpoint with a valid barrel UUID, the server
 curl -X 'GET'   'https://to-barrel-monitor.azurewebsites.net/barrels/95e50f55-6b64-4468-50fe-08dd4447ff51' -i
 ```
 
-**Expected result:**
-Response HTTP code: 200 OK
-**Actual result:**
+**Expected result:**  
+Response HTTP code: 200 OK  
+**Actual result:**  
 Response HTTP code: 500 Internal Server Error
 
 **Log:**  
@@ -377,7 +377,7 @@ curl -X 'DELETE' \
 ```
 
 **Espected result:**  
-Response HTTP code: 200 ok
+Response HTTP code: 200 ok  
 **Actual result:**  
 Response Http code: 500 Internal Server Error
 
@@ -410,8 +410,8 @@ curl -X 'POST' \
 ```
 
 **Espected result:**  
-Response HTTP code: 200 ok
-**Actual result:**  
+Response HTTP code: 200 ok  
+**Actual result:**    
 Response Http code: 400 Error: Bad Request
 
 **Log:**
@@ -490,7 +490,7 @@ curl -X 'POST' \
 }' -i
 ```  
 **Actual results:**
-Error 500
+Error 500  
 **Expected result:**
 Error 409
 
