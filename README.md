@@ -489,9 +489,9 @@ curl -X 'POST' \
   "nfc": "test"
 }' -i
 ```  
-**Actual results:**
+**Actual results:**  
 Error 500  
-**Expected result:**
+**Expected result:**  
 Error 409
 
 **Log:**  
