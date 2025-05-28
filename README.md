@@ -32,10 +32,11 @@ It's run if:
 If the command `npx playwright show-report` opens an empty browser window, check whether the port used for the report is already occupied by another service.  
 
 ## TODO ##
-- TC005 Validate Successful Retrieval of Barrel via GET /barrels/{id} - TODO data driven
-- TC001 Create Barrel via POST /barrels - TODO verify data in system 
-- TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id} -TODO data driven
-- TC008 Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id} -TODO data driven
+- TC005 Validate Successful Retrieval of Barrel via GET /barrels/{id} - TODO data driven  
+- TC001 Create Barrel via POST /barrels - TODO verify data in system  
+- TC007 Validate Successful Deletion of Barrel via DELETE /barrels/{id} -TODO data driven 
+- TC008 Validate Deletion Attempt with Incorrect Barrel ID via DELETE /barrels/{id} -TODO data driven  
+- TC014 Validate Error for Malformed Measurements id GET /measurements/{id} - TODO data driven
 
 ---
 ## ID001 ##

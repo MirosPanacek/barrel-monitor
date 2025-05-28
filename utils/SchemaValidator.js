@@ -10,9 +10,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export class SchemaValidator {
-  static ajv = addFormats(new Ajv({ allErrors: true }));
-
-  static validateSchema(data, schemaFile, referencedSchemas = []) {
+  constructor() {
+    this.ajv = addFormats(new Ajv({ allErrors: true }));
+  }
+  
+  validateSchema(data, schemaFile, referencedSchemas = []) {
     //add references
     for (const refFile of referencedSchemas) {
     const refPath = path.resolve(__dirname, '../schemas', refFile);

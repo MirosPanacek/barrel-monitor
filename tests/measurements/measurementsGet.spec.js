@@ -44,7 +44,8 @@ test(`TC012 Validate Successful Retrieval of Array of Measurements via GET /meas
     expect(response.status()).toBe(200);//response satus code validation 
     const json = await response.json();
     console.log(json)
-    SchemaValidator.validateSchema(json, 'MeasurementsArray.schema.json', ['Measurement.schema.json']);
+    const validator = new SchemaValidator();
+    validator.validateSchema(json, 'MeasurementsArray.schema.json', ['Measurement.schema.json']);
 });
 
 /**
@@ -71,7 +72,8 @@ test(`TC013 Validate Successful Retrieval of Measurements via GET /measurements/
     expect(response.status()).toBe(200);//response satus code validation 
     const json = await response.json();
     console.log(json)
-    SchemaValidator.validateSchema(json, 'Measurement.schema.json');
+    const validator = new SchemaValidator();
+    validator.validateSchema(json, 'Measurement.schema.json');
 });
 
 /**

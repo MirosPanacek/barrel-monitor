@@ -37,7 +37,8 @@ test(`TC004 Validate Successful Retrieval of Array of Barrels via GET /barrels `
     expect(response.status()).toBe(200);//response satus code validation 
     const json = await response.json();
     console.log(json)
-    SchemaValidator.validateSchema(json, 'BarrelsArray.schema.json', ['Barrel.schema.json']);
+    const validator = new SchemaValidator();
+    validator.validateSchema(json, 'BarrelsArray.schema.json', ['Barrel.schema.json']);
 });
 
 /**
@@ -63,7 +64,8 @@ test(`TC005 Validate Successful Retrieval of Barrel via GET /barrels/{id}`, asyn
     expect(response.status()).toBe(200);//response satus code validation 
     const json = await response.json();
     console.log(json)
-    SchemaValidator.validateSchema(json, 'Barrel.schema.json');
+    const validator = new SchemaValidator();
+    validator.validateSchema(json, 'Barrel.schema.json');
 });
 
 /**

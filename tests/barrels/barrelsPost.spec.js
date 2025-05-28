@@ -5,7 +5,7 @@ import { removeBarrel } from '../../utils/RemoveBarrel';
 import { invalidBarrels } from '../../testingData/InvalidBarrelsPost';
 import { barrelWithSameId } from '../../testingData/BarrelsSameIdPost'
 
-//**ID fo new created barels
+//**ID of new created barrels
 // It is for clean-up */
 let barrelslId = [];
 let sameId;
@@ -45,11 +45,12 @@ for (const barrel of barrels) {//data driven test
         const json = await response.json();
         console.log(json)
         barrelslId.push(json.id);
-        await expect.soft(json.qr).toContain(barrel.payload.qr);
-        await expect.soft(json.rfid).toContain(barrel.payload.rfid);
-        await expect.soft(json.nfc).toContain(barrel.payload.nfc);
-        SchemaValidator.validateSchema(json, 'Barrel.schema.json');
-        expect(response.status()).toBe(201);//response satus code validation 
+        expect.soft(json.qr).toContain(barrel.payload.qr);
+        expect.soft(json.rfid).toContain(barrel.payload.rfid);
+        expect.soft(json.nfc).toContain(barrel.payload.nfc);
+        expect.soft(response.status()).toBe(201);//response satus code validation
+        const validator = new SchemaValidator();
+        validator.validateSchema(json, 'Barrel.schema.json');
         // TODO verifi data from get if exist
     });
 }

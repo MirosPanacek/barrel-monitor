@@ -2,8 +2,8 @@ import { test, expect, request } from '@playwright/test';
 import { SchemaValidator } from '../../utils/SchemaValidator';
 import { measurements } from '../../testingData/MeasurementsPost';
 
-// **IDs of newly created Measurements (for cleanup)**
-let measurementIds = [];
+//IDs of newly created barrels (for cleanup)
+let barrelslId = [];
 let existingMeasurementId;
 
 // Get an existing Measurement ID from API before tests
@@ -12,12 +12,12 @@ let existingMeasurementId;
 });
 */
 // Remove all created Measurements after tests
-/*test.afterAll(async () => {
-    for (const id of measurementIds) {
+test.afterAll(async () => {
+    for (const id of barrelslId) {
         await removeMeasurement(id);
     }
 });
-*/
+
 /**
  * Test Case: TC009 Validate Successful Creation of Measurement via POST /measurements
  * ID: TC009
@@ -42,13 +42,14 @@ for (const measurement of measurements) { // data driven test
         const response = await request.post('measurements/', { data: measurement.payload });
         const json = await response.json();
         console.log(json);
-        measurementIds.push(json.id);
         expect.soft(json.id).toContain(measurement.payload.id);
+        barrelslId.push(json.barrelId);//add barel id  for cleanup
         expect.soft(json.barrelId).toContain(measurement.payload.barrelId);
         expect.soft(json.dirtLevel).toContain(measurement.payload.dirtLevel);
         expect.soft(json.weight).toContain(measurement.payload.weight);
         expect.soft(response.status()).toBe(201);
-        SchemaValidator.validateSchema(json, 'Measurement.schema.json');
+        const validator = new SchemaValidator();
+        validator.validateSchema(json, 'Measurement.schema.json');
         // TODO verify data from GET if exist
     });
 }
@@ -84,6 +85,9 @@ for (const measurement of measurements) { // data driven test
         const response = await request.post('measurements/', { data: measurement.payload });
         const json = await response.json();
         console.log(json);
+        if(json.id) {
+            barrelslId.push(json.id);
+        }
         expect.soft(response.status()).toBe(400);
     });
 }
@@ -106,3 +110,10 @@ for (const measurement of measurements) { // data driven test
  *   - Response body contains an appropriate error message (e.g., "Measurement ID already exists")
  *   - No duplicate measurement is created
  */
+test(`TC011 Validate Conflict on Creating Measurement with Existing ID via POST /measurements`, async ({ request }) => {
+    console.log(`Running test with measurement id: ${sameId.payload.id}`);
+    const response = await request.post('measurements/', { data: sameId.payload });
+    const headers = response.headers();
+    console.log(headers)
+    expect(response.status()).toBe(409);//response satus code validation 
+});
